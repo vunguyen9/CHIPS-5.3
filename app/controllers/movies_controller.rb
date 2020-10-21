@@ -14,7 +14,6 @@ class MoviesController < ApplicationController
       @ratings_to_show = params[:ratings].keys()
     end
     # binding.pry
-    byebug
     @movies = Movie.with_ratings(@ratings_to_show)
 
   end
