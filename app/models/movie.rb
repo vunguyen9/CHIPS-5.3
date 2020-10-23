@@ -5,10 +5,6 @@ class Movie < ActiveRecord::Base
     end
 
     def self.with_ratings(rating_list, sort)
-        if rating_list.empty?
-            Movie.all.order(sort)
-        else
-            Movie.where("upper(rating) IN (?)", rating_list).order(sort)
-        end
+        Movie.where("upper(rating) IN (?)", rating_list).order(sort)
     end
 end

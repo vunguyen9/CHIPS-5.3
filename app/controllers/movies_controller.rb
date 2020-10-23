@@ -10,11 +10,21 @@ class MoviesController < ApplicationController
     @all_ratings = Movie.all_ratings
 
     @ratings_to_show = []
+
     @sort = ""
+    
     if !params[:ratings].nil?
-      @ratings_to_show = params[:ratings].keys()
-      @sort = params[:ratings][@ratings_to_show[0]]
+      params[:ratings].each do |k, v|
+        if v != "0"
+          @ratings_to_show.push(k)
+          @sort = v
+        end
+      end
+    else
+      @ratings_to_show = Movie.all_ratings
     end
+  
+    
     # binding.pry
 
     
