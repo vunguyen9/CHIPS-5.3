@@ -33,7 +33,6 @@ class MoviesController < ApplicationController
     end
   
     @movies = Movie.with_ratings(@ratings_to_show, @sort)
-    
   end
 
   def new
