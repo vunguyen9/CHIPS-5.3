@@ -18,13 +18,17 @@ class MoviesController < ApplicationController
     @sort = ""
     
     if !params[:ratings].nil?
-      session[:ratings] = params[:ratings]
-      params[:ratings].each do |k, v|
-        if v != "0"
-          @ratings_to_show.push(k)
-          @sort = v
-        end
-      end
+      filter_ratings = params[:ratings].select {|k, v| v != "0"}
+      session[:ratings] = filter_ratings
+      @ratings_to_show = filter_ratings.keys
+      # @sort = filter_ratings.values[0]
+      # session[:ratings] = params[:ratings]
+      # params[:ratings].each do |k, v|
+      #   if v != "0"
+      #     @ratings_to_show.push(k)
+      #     @sort = v
+      #   end
+      # end
     else
       @ratings_to_show = Movie.all_ratings
     end
