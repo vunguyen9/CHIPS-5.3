@@ -9,11 +9,16 @@ class MoviesController < ApplicationController
   def index
     @all_ratings = Movie.all_ratings
 
+    if (params[:ratings].nil? && !session[:ratings].nil?) || (params[:sort].nil? && !session[:sort].nil?)
+      redirect_to movies_path(:ratings => params[:ratings] || session[:ratings], :sort => params[:sort] || session[:sort])
+    end
+
     @ratings_to_show = []
 
     @sort = ""
     
     if !params[:ratings].nil?
+      session[:ratings] = params[:ratings]
       params[:ratings].each do |k, v|
         if v != "0"
           @ratings_to_show.push(k)
@@ -23,16 +28,16 @@ class MoviesController < ApplicationController
     else
       @ratings_to_show = Movie.all_ratings
     end
-  
-    
     # binding.pry
 
-    
-    if !params[:sort].nil? 
+    if !params[:sort].nil?
+      session[:sort] = params[:sort]
       @sort = params[:sort]
     end
-  
+    
+    @ratings_to_show = Movie.all_ratings if @ratings_to_show.empty?
     @movies = Movie.with_ratings(@ratings_to_show, @sort)
+    
   end
 
   def new
