@@ -10,27 +10,28 @@ class MoviesController < ApplicationController
     @all_ratings = Movie.all_ratings
 
     if (params[:ratings].nil? && !session[:ratings].nil?) || (params[:sort].nil? && !session[:sort].nil?)
+      
       session[:ratings] = params[:ratings] || session[:ratings]
       session[:sort] = params[:sort] || session[:sort]
       redirect_to movies_path(:ratings => session[:ratings], :sort => session[:sort])
     end
 
-    @ratings_to_show = []
+    # if !session[:ratings].nil? || !session[:sort].nil?
+    #   if !session[:ratings].nil? && session[:sort].nil?
+    #     session[:sort] = params[:sort]
+    #   elsif session[:ratings].nil? && !session[:sort].nil?
+    #     session[:ratings] = Hash[Movie.all_ratings.map {|v| [v,'1']}]
+    #   end
+    #   redirect_to movies_path(:ratings => session[:ratings], :sort => session[:sort])
+    # end
 
-    @sort = ""
+    @ratings_to_show = []
+    @sort = params[:sort]
     
     if !params[:ratings].nil?
-      # filter_ratings = params[:ratings].select {|k, v| v != "0"}
       session[:ratings] = params[:ratings]
-      @ratings_to_show = params[:ratings].keys
-      # @sort = filter_ratings.values[0]
-      # session[:ratings] = params[:ratings]
-      # params[:ratings].each do |k, v|
-      #   if v != "0"
-      #     @ratings_to_show.push(k)
-      #     @sort = v
-      #   end
-      # end
+      filter_ratings = params[:ratings].select {|k, v| v != "0"}
+      @ratings_to_show = filter_ratings.keys
     else
       @ratings_to_show = Movie.all_ratings
     end
@@ -40,6 +41,8 @@ class MoviesController < ApplicationController
       session[:sort] = params[:sort]
       @sort = params[:sort]
     end
+
+    
     
     @ratings_to_show = Movie.all_ratings if @ratings_to_show.empty?
     @movies = Movie.with_ratings(@ratings_to_show, @sort)
