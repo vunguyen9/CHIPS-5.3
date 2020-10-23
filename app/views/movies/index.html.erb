@@ -2,13 +2,13 @@
 <h2>All Movies</h2>
 
 <%#  Part 2: Start here... %>
-<%= form_tag movies_path, method: :get, id: 'ratings_form' do %>
+<%= form_tag movies_path(:sort => @sort), method: :get, id: 'ratings_form' do %>
   Include:
   <% @all_ratings.each do |rating| %>
     <div class="form-check  form-check-inline">
       <%= label_tag "ratings[#{rating}]", rating, class: 'form-check-label' %>
       <%# <%= hidden_field_tag "ratings[#{rating}]", "0" %> 
-      <%= check_box_tag "ratings[#{rating}]", "1",  @ratings_to_show.include?(rating), class: 'form-check-input' %>
+      <%= check_box_tag "ratings[#{rating}]", @sort,  @ratings_to_show.include?(rating), class: 'form-check-input' %>
     </div>
   <% end %>
   <%= submit_tag 'Refresh', id: 'ratings_submit', class: 'btn btn-primary' %>
@@ -17,10 +17,19 @@
 <table class="table table-striped col-md-12" id="movies">
   <thead>
     <tr>
-      <th>Movie Title</th>
-      <th>Rating</th>
-      <th>Release Date</th>
-      <th>More Info</th>
+      <% if @sort == "title" %>
+        <th class="bg-warning">Movie Title</th>
+      <% else %>
+        <th><%= link_to('Movie Title', movies_path(:sort => 'title', :ratings => Hash[@ratings_to_show.map {|v| [v,'1']}] ), :id => "title_header") %></th>
+      <% end %>
+        <th>Rating</th>
+      <% if @sort == "release_date" %>
+        <th class="bg-warning">Release Date</th>
+      <% else %>
+        <th><%= link_to('Release Date', movies_path(:sort => 'release_date', :ratings => Hash[@ratings_to_show.map {|v| [v,'1']}] ), :id => "release_date_header") %></th>
+      <% end %>
+        <th>More Info</th>
+      
     </tr>
   </thead>
   <tbody>
