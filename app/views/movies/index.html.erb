@@ -7,7 +7,7 @@
   <% @all_ratings.each do |rating| %>
     <div class="form-check  form-check-inline">
       <%= label_tag "ratings[#{rating}]", rating, class: 'form-check-label' %>
-      <%= hidden_field_tag "ratings[#{rating}]", "0" %>
+      <%# <%= hidden_field_tag "ratings[#{rating}]", "0"  %>
       <%= check_box_tag "ratings[#{rating}]", "1",  @ratings_to_show.include?(rating), class: 'form-check-input' %>
     </div>
   <% end %>
